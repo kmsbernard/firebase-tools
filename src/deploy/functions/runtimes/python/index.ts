@@ -121,7 +121,8 @@ export class Delegate implements runtimes.RuntimeDelegate {
           "Failed to find location of Firebase Functions SDK. " +
             `Did you forget to run '${command} ${args.join(" ")} && ${
               this.bin
-            } -m pip install -r requirements.txt'?`,
+            } -m pip install -r requirements.txt'?\n` +
+            "You may also need to check the version of Python in the virtual environment and the `runtime` field in firebase.json.",
         );
       }
     }
