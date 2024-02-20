@@ -30,11 +30,17 @@ export async function tryCreateDelegate(
     logger.debug("Customer code is not Python code.");
     return;
   }
-  const runtime = context.runtime ? context.runtime : LATEST_VERSION;
-  if (!runtimes.isValidRuntime(runtime)) {
-    throw new FirebaseError(`Runtime ${runtime} is not a valid Python runtime`);
+  if (!context.runtime) {
+    throw new FirebaseError(
+      "`runtime` field is required but was not found in firebase.json.\n" +
+        "To fix this, add the following lines to the `functions` section of your firebase.json:\n" +
+        `"runtime": "${LATEST_VERSION}"\n`,
+    );
   }
-  return Promise.resolve(new Delegate(context.projectId, context.sourceDir, runtime));
+  if (!runtimes.isValidRuntime(context.runtime)) {
+    throw new FirebaseError(`Runtime ${context.runtime} is not a valid Python runtime`);
+  }
+  return Promise.resolve(new Delegate(context.projectId, context.sourceDir, context.runtime));
 }
 
 /**
